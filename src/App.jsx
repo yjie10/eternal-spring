@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import NumberBox from './components/NumberBox';
-import GuessHistory from './components/GuessHistory';
+import StartPage from './components/StartPage';
+import PlayingPage from './components/PlayingPage';
+import WinningMessage from './components/WinningMessage';
 
 import './App.css';
 
@@ -20,9 +21,9 @@ function App() {
   const [currentGuess, setCurrentGuess] = useState([]);
   const [history, setHistory] = useState([]);
   const [gamePhase, setGamePhase] = useState('start');
-  const [showRules, setShowRules] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  console.log(secretNumbers);
+  // console.log(secretNumbers);
 
   const startGame = () => {
     setSecretNumbers(shuffle());
@@ -41,7 +42,13 @@ function App() {
   };
 
   const returnToTitle = () => {
-    setGamePhase('start');
+    const confirmReturn = window.confirm(
+      'Are you sure you want to return to the title?'
+    );
+    if (confirmReturn) {
+      setShowModal(false);
+      setGamePhase('start');
+    }
   };
 
   const handleChange = (index, direction) => {
@@ -80,35 +87,22 @@ function App() {
   };
 
   return gamePhase === 'start' ? (
-    <div>
-      <button onClick={startGame}>Start</button>
-    </div>
+    <StartPage startGame={startGame} />
   ) : (
-    <div>
-      <h1>Eternal Spring</h1>
-      <button onClick={returnToTitle}>Return to Title</button>
-      <button onClick={() => setShowRules(true)}>❓</button>
-      {showRules && (
-        <div className="modal">
-          <h2>How to Play</h2>
-          <p>Find the secret numbers</p>
-          <button onClick={() => setShowRules(false)}>❎</button>
-        </div>
-      )}
-      {currentGuess.map((number, index) => (
-        <NumberBox
-          key={`box-${index}`}
-          index={index}
-          value={number}
-          handleChange={(index, direction) => handleChange(index, direction)}
-        />
-      ))}
-      <button onClick={handleGuess} disabled={gamePhase === 'win'}>
-        Guess!
-      </button>
-      <button onClick={handleRestart}>Restart</button>
-      <GuessHistory history={history} />
-    </div>
+    <>
+      {gamePhase === 'win' && <WinningMessage />}
+      <PlayingPage
+        returnToTitle={returnToTitle}
+        setShowModal={setShowModal}
+        showModal={showModal}
+        currentGuess={currentGuess}
+        handleChange={handleChange}
+        handleGuess={handleGuess}
+        gamePhase={gamePhase}
+        handleRestart={handleRestart}
+        history={history}
+      />
+    </>
   );
 }
 
