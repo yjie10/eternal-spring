@@ -12,7 +12,7 @@ While building this project, I traced the game's core logic back to the traditio
 
 ## 🖥️ Demo
 
-[eternal-spring app](eternal-spring.netlify.app)
+[eternal-spring app](https://eternal-spring.netlify.app/)
 
 🌿 Best experienced with sound on for a full atmosphere immersion.
 
