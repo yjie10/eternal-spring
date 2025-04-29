@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import StartPage from './components/StartPage';
 import PlayingPage from './components/PlayingPage';
 import WinningMessage from './components/WinningMessage';
 
 import './App.css';
+
+/* Utilities */
 
 const shuffle = () => {
   const numbers = [];
@@ -16,16 +18,59 @@ const shuffle = () => {
   return numbers;
 };
 
+const confirmAction = (message, onConfirm) => {
+  const confirmed = window.confirm(message);
+  if (confirmed) {
+    onConfirm();
+  }
+};
+
+const evaluateGuess = (currentGuess, secretNumbers) => {
+  const count = { yin: 0, yang: 0 };
+  for (let i = 0; i < secretNumbers.length; i++) {
+    const isNumberPresent = secretNumbers.includes(currentGuess[i]);
+    if (secretNumbers[i] === currentGuess[i]) {
+      count.yang++;
+    } else if (isNumberPresent) {
+      count.yin++;
+    }
+  }
+  return count;
+};
+
 function App() {
+  /* State */
+
   const [secretNumbers, setSecretNumbers] = useState([]);
   const [currentGuess, setCurrentGuess] = useState([]);
   const [history, setHistory] = useState([]);
   const [gamePhase, setGamePhase] = useState('start');
   const [showModal, setShowModal] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
 
-  // console.log(secretNumbers);
+  /* console.log(secretNumbers); // leaving in for quick testing purposes */
+
+  /* bgm */
+
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
+
+  /* Handlers */
 
   const startGame = () => {
+    console.log(audioRef);
+    if (audioRef.current) {
+      console.log('hello');
+      audioRef.current.muted = false;
+      audioRef.current.play().catch((error) => {
+        console.log('Autoplay error:', error);
+      });
+    }
     setSecretNumbers(shuffle());
     setHistory([]);
     setCurrentGuess(Array(4).fill(0));
@@ -33,22 +78,14 @@ function App() {
   };
 
   const handleRestart = () => {
-    const confirmRestart = window.confirm(
-      'Are you sure you want to restart the game?'
-    );
-    if (confirmRestart) {
-      startGame();
-    }
+    confirmAction('Are you sure you want to restart the game?', startGame);
   };
 
-  const returnToTitle = () => {
-    const confirmReturn = window.confirm(
-      'Are you sure you want to return to the title?'
-    );
-    if (confirmReturn) {
+  const handleReturnToTitle = () => {
+    confirmAction('Are you sure you want to return to the title?', () => {
       setShowModal(false);
       setGamePhase('start');
-    }
+    });
   };
 
   const handleChange = (index, direction) => {
@@ -60,19 +97,7 @@ function App() {
   };
 
   const handleGuess = () => {
-    const count = {
-      yin: 0,
-      yang: 0,
-    };
-
-    for (let i = 0; i < secretNumbers.length; i++) {
-      const isNumberPresent = secretNumbers.includes(currentGuess[i]);
-      if (secretNumbers[i] === currentGuess[i]) {
-        count.yang++;
-      } else if (isNumberPresent) {
-        count.yin++;
-      }
-    }
+    const count = evaluateGuess(currentGuess, secretNumbers);
 
     const guessEntry = {
       guess: [...currentGuess],
@@ -86,22 +111,31 @@ function App() {
     }
   };
 
-  return gamePhase === 'start' ? (
-    <StartPage startGame={startGame} />
-  ) : (
+  /* Render */
+
+  return (
     <>
-      {gamePhase === 'win' && <WinningMessage />}
-      <PlayingPage
-        returnToTitle={returnToTitle}
-        setShowModal={setShowModal}
-        showModal={showModal}
-        currentGuess={currentGuess}
-        handleChange={handleChange}
-        handleGuess={handleGuess}
-        gamePhase={gamePhase}
-        handleRestart={handleRestart}
-        history={history}
-      />
+      <audio ref={audioRef} src="/scar03.mp3" autoPlay loop muted />
+      {gamePhase === 'start' ? (
+        <StartPage startGame={startGame} />
+      ) : (
+        <>
+          {gamePhase === 'win' && <WinningMessage />}
+          <PlayingPage
+            handleReturnToTitle={handleReturnToTitle}
+            setShowModal={setShowModal}
+            showModal={showModal}
+            currentGuess={currentGuess}
+            handleChange={handleChange}
+            handleGuess={handleGuess}
+            gamePhase={gamePhase}
+            handleRestart={handleRestart}
+            history={history}
+            isMuted={isMuted}
+            setIsMuted={setIsMuted}
+          />
+        </>
+      )}
     </>
   );
 }

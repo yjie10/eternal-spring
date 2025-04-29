@@ -1,12 +1,50 @@
-# React + Vite
+# 🌊 eternal-spring
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A tranquil number-guessing mini game inspired by the classic Chinese RPG **Xuan-Yuan Sword: The Scar of Sky (轩辕剑叁外传：天之痕)**.
 
-Currently, two official plugins are available:
+While building this project, I traced the game's core logic back to the traditional "Bulls and Cows" game — a discovery that added an extra layer of connection to this nostalgic journey.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<p align="center"><i>A preview of the mini game: </i></p>
 
-## Expanding the ESLint configuration
+![eternal-spring screenshot](./eternal-spring_ss.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🖥️ Demo
+
+[eternal-spring app](eternal-spring.netlify.app)
+
+🌿 Best experienced with sound on for a full atmosphere immersion.
+
+## 🛠️ Tech Stack
+
+- React@19 + Vite
+- Tailwind CSS
+- Deployed w/ Netlify
+
+## 🚀 Getting Started
+
+```bash
+$ git clone https://github.com/yjie10/eternal-spring
+$ cd eternal-spring
+$ npm install
+$ npm run dev
+```
+
+Open http://localhost:5173 to view it in the browser.
+
+## ⚙️ Features
+
+- Gentle background music, with mute/unmute control 🎶
+- 4 unique digits generated each round 🎲
+- Feedback system: _yang_ 🌕 for correct number & position, _yin_ 🌑 for correct number but wrong position ☯️
+- Game instructions accessible anytime via modal 📜
+- Restart the game or return to title screen anytime 🔄
+
+## 💬 About
+
+This project was created as a lighthearted exercise to polish React fundamentals, practice component structuring and design an interactive mini-world.
+
+Again, special thanks to the nostalgic inspiration from the classic RPG -- **Xuan-Yuan Sword: The Scar of Sky (轩辕剑叁外传：天之痕)**.
+
+The background music is directly borrowed from the number guessing mini-game map, bringing a personal touch of memory into this project.

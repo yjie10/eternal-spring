@@ -6,7 +6,7 @@ import GuessHistory from './GuessHistory';
 import { GAME_INSTRUCTIONS } from '../constants/instructions';
 
 const PlayingPage = ({
-  returnToTitle,
+  handleReturnToTitle,
   setShowModal,
   showModal,
   currentGuess,
@@ -15,14 +15,29 @@ const PlayingPage = ({
   gamePhase,
   handleRestart,
   history,
+  setIsMuted,
+  isMuted,
 }) => (
   <div className="bg-gradient-to-b from-gray-100 via-amber-50 to-gray-200 flex flex-col items-center min-h-screen space-y-6">
-    <button
-      className="absolute top-4 right-4 bg-white/70 px-3 py-1 rounded-full shadow-md text-lg cursor-pointer"
-      onClick={() => setShowModal(true)}
-    >
-      ?
-    </button>
+    <div className="absolute top-4 right-4 flex space-x-2">
+      <button
+        className="bg-white/70 px-3 py-1 rounded-full shadow-md text-lg cursor-pointer"
+        onClick={() => setIsMuted(!isMuted)}
+      >
+        {isMuted ? (
+          <img className="w-[20px] h-[20px]" src="/icons/audio-off.svg" />
+        ) : (
+          <img className="w-[20px] h-[20px]" src="/icons/audio-on.svg" />
+        )}
+      </button>
+
+      <button
+        className="bg-white/70 px-3 py-1 rounded-full shadow-md text-lg cursor-pointer"
+        onClick={() => setShowModal(true)}
+      >
+        <img className="w-[20px] h-[20px]" src="icons/question.svg" />
+      </button>
+    </div>
     <AnimatePresence>
       {showModal && (
         <>
@@ -41,10 +56,10 @@ const PlayingPage = ({
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.2 }}
           >
-            <h2 className="text-3xl font-bold mb-4 text-center text-green-700">
+            <h2 className="text-3xl font-bold mb-4 text-center text-[#88A28D]">
               Game Instructions
             </h2>
-            <div className="w-16 h-1 bg-green-300 mx-auto mb-6 rounded-full"></div>
+            <div className="w-16 h-1 bg-[#bdd6d2] mx-auto mb-6 rounded-full"></div>
             <p className="text-gray-700 text-center whitespace-pre-line leading-relaxed">
               {GAME_INSTRUCTIONS}
             </p>
@@ -56,8 +71,8 @@ const PlayingPage = ({
                 Close
               </button>
               <button
-                className="px-5 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 active:scale-95 transition cursor-pointer"
-                onClick={returnToTitle}
+                className="px-5 py-2 bg-[#B2C2B0] text-white rounded-lg hover:bg-[#9caa9b] active:scale-95 transition cursor-pointer"
+                onClick={handleReturnToTitle}
               >
                 Return to Title
               </button>
