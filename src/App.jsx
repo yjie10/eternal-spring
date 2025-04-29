@@ -63,9 +63,7 @@ function App() {
   /* Handlers */
 
   const startGame = () => {
-    console.log(audioRef);
     if (audioRef.current) {
-      console.log('hello');
       audioRef.current.muted = false;
       audioRef.current.play().catch((error) => {
         console.log('Autoplay error:', error);
